@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { allUsers, singleUser, createUser, updateUser,
   allUsersWithPost, createPost, fetchPost, publishPost, deletePost,
-  loginUser
+  loginUser, allUsersWithPostPublic
 } = require('./functions.js');
 
 
@@ -84,6 +84,10 @@ router.get('/usersfeed', async (req, res) => {
   res.json(feed)
 })
 
+router.get('/publicwall', async (req, res ) => {
+  const feed = await allUsersWithPostPublic()
+  res.json(feed);
+})
 router.get('/feed', async (req, res) => {
   try {
     const feed = await fetchPost()

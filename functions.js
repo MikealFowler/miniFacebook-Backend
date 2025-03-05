@@ -104,6 +104,30 @@ async function allUsersWithPost() {
     }
 }
 
+async function allUsersWithPostPublic() {
+    try {
+        const users = await prisma.user.findMany({
+            where: {
+                posts: {
+                    some: {
+                        published: true
+                    }
+                }
+            }, include: {
+                posts: {
+                    where: {
+                        published: true
+                    }
+                }
+            }
+        })
+        return users
+    } catch (error) {
+        console.error(error)
+    }
+
+}
+
 async function publishPost(id, postid) {
     try {
         const user = await singleUser(id)
@@ -165,5 +189,6 @@ async function getPhotos() {
 module.exports = {
     allUsers, singleUser, createUser,
     updateUser, allUsersWithPost, createPost,
-    fetchPost, publishPost, deletePost, loginUser
+    fetchPost, publishPost, deletePost, loginUser,
+    allUsersWithPostPublic
 }

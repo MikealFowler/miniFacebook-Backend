@@ -1,0 +1,29 @@
+services:
+  database:
+    image: postgres:17.2
+    container_name: facebook-databases
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: mydb
+    ports:
+      - "8082:5432"
+    networks:
+      - minibook_network
+
+  api:
+    build: .
+    container_name: facebook-backends
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: "postgresql://postgres:admin@facebook-databases:5432/mydb"
+    ports:
+      - "3000:3000"
+    networks:
+      - minibook_network
+
+networks:
+  minibook_network:
+    driver: bridge
